@@ -1,46 +1,119 @@
-# Getting Started with Create React App
+# 3D Виртуальное пространство на React и Three.js
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Описание проекта
 
-## Available Scripts
+Интерактивное 3D-приложение, представляющее собой виртуальное пространство с возможностью свободного перемещения и взаимодействия с объектами. Проект реализован на React с использованием библиотеки Three.js для 3D-рендеринга и предназначен для демонстрации информации о компании и её услугах.
 
-In the project directory, you can run:
+## Основные возможности
 
-### `npm start`
+### Навигация и управление
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Свободное перемещение в 3D-пространстве с помощью клавиш WASD
+- Осмотр окружения с помощью движений мыши
+- Система обнаружения столкновений для предотвращения прохождения сквозь стены
+- Автоматическое сохранение позиции и поворота камеры между сессиями в localStorage
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Интерфейс и взаимодействие
 
-### `npm test`
+- Центральное перекрестие для взаимодействия с объектами
+- Информационные подсказки о доступных действиях
+- Информационные карточки при взаимодействии с объектами
+- Подсветка интерактивных объектов для улучшения пользовательского опыта
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Визуальные эффекты
 
-### `npm run build`
+- Постоянное слабое свечение интерактивных объектов
+- Отключение подсветки при наведении курсора на объекты
+- Информационные панели с динамическим контентом
+- Реалистичное освещение и тени
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Архитектура проекта
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Технологический стек
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **React**: основа пользовательского интерфейса
+- **Three.js**: библиотека для 3D-графики в браузере
+- **React Three Fiber**: интеграция Three.js с React компонентами
+- **React Three Drei**: готовые компоненты и утилиты для Three.js в React
+- **TypeScript**: статическая типизация для улучшения разработки
 
-### `npm run eject`
+### Структура проекта
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### Основные компоненты
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- `/src/components/Room`: Основной контейнер 3D-сцены
+  - `index.tsx`: Инициализация Canvas и управление камерой
+  - `Content/index.tsx`: Организация содержимого 3D-сцены
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### Интерактивные объекты
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- `/src/components/Room/Content/Box`: Коробки с информацией о компании
+- `/src/components/Room/Content/DistributionBox`: Распределительные щиты
+- `/src/components/Room/Content/ControlPanel`: Панель управления
+- `/src/components/Room/Content/Table`: Интерактивные столы
+- `/src/components/Room/Content/Model`: 3D-модели оборудования
 
-## Learn More
+#### Компоненты высшего порядка (HOC)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- `/src/components/Room/Content/HOC/withHoverEffect`: Добавляет эффект подсветки к объектам
+  - Постоянное слабое зеленое свечение объектов
+  - Обработка взаимодействия через центральное перекрестие
+  - Реализация эффектов подсветки через эмиссию материалов
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### Окружение и атмосфера
+
+- `/src/components/Environment`: Космическое окружение
+  - `Space`: Звездное небо и фон
+  - `Stars`: Система частиц для создания звезд
+  - `Sun`, `Moon`, `Earth`: Космические объекты с анимацией
+
+## Особенности реализации
+
+### Система подсветки объектов
+
+- Компонент `withHoverEffect` реализует паттерн HOC (компонент высшего порядка)
+- Объекты получают постоянное слабое зеленое свечение (emissiveIntensity: 0.025)
+- При наведении центрального перекрестия на объект подсветка отключается
+- Используется raycasting из центра экрана для определения наведения на объект
+
+### Перемещение в пространстве
+
+- Реализована система обработки клавиш WASD для перемещения
+- Управление камерой происходит через контекст Three.js
+- Обнаружение столкновений предотвращает прохождение через стены и объекты
+- Система проверяет границы помещения и корректирует позицию камеры
+
+### Сохранение состояния
+
+- Позиция и поворот камеры автоматически сохраняются в localStorage
+- При повторном посещении пользователь возвращается в то же место
+- Реализована проверка валидности сохраненных координат
+
+### Загрузка 3D-моделей
+
+- Использование хуков useGLTF и useFBX для загрузки моделей в формате GLB и FBX
+- Клонирование моделей для предотвращения конфликтов при многократном использовании
+- Присвоение уникальных идентификаторов для каждого экземпляра модели
+
+## Перспективы развития
+
+### Технические улучшения
+
+- Оптимизация производительности для сложных сцен
+- Улучшение системы освещения и теней
+- Добавление физической симуляции для взаимодействия с объектами
+- Оптимизация для мобильных устройств
+
+### Функциональные дополнения
+
+- Мультипользовательский режим с возможностью видеть других посетителей
+- Расширенное взаимодействие с объектами (перемещение, активация)
+- Динамическая загрузка контента из API
+- Система телепортации между локациями
+
+### Визуальные улучшения
+
+- Расширение пространства и добавление новых локаций
+- Улучшение качества текстур и моделей
+- Добавление эффектов постобработки (bloom, ambient occlusion)
+- Анимация объектов и персонажей
