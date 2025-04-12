@@ -1,0 +1,81 @@
+@import "./variables.scss";
+
+* {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  outline: none;
+  font-family: "Kanit", sans-serif;
+  box-sizing: border-box;
+}
+
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  background-color: $logo_black;
+  box-sizing: border-box;
+}
+
+body {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+html, body {
+  overflow: hidden;
+  line-height: 1.8;
+  font-size: $textSize;
+}
+
+a,
+span,
+p,
+b,
+h1,
+h2,
+h3,
+h4,
+h5 {
+  cursor: default;
+  transition: all 0.3s ease;
+
+  &:hover {
+
+    &::selection {
+      background-color: rgba(white, 0.1);
+    }
+  }
+
+  &::selection {
+    background-color: rgba(white, 0.2);
+  }
+}
+
+h1 {
+  font-weight: 800;
+  font-size: $textSize * 4;
+}
+
+h2 {
+  font-weight: 600;
+  font-size: $textSize * 3;
+}
+
+h2 {
+  font-weight: 500;
+  font-size: $textSize * 2;
+}
+
+a {
+  text-decoration: none;
+}
+
+@mixin noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                        supported by Chrome, Opera and Firefox */
+}
