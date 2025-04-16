@@ -1,0 +1,44 @@
+.infoCard {
+  background: rgba(0, 0, 0, 0.9);
+  padding: 10px;
+  border-radius: 4px;
+  color: #00ff00;
+  font-family: monospace;
+  width: 160px;
+  border: 1px solid #00ff00;
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
+  pointer-events: none;
+  overflow: hidden;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  &_title {
+    margin: 0 0 8px 0;
+    color: #00ff00;
+    border-bottom: 1px solid #00ff00;
+    padding-bottom: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+
+  &_content {
+    font-size: 12px;
+    margin: 4px 0;
+    display: flex;
+    justify-content: space-between;
+    line-height: 1.4;
+
+    &__bold {
+      font-weight: bold;
+    }
+
+    &__right {
+      color: #ffffff;
+      margin-left: 8px;
+      text-align: right;
+      flex-grow: 1;
+    }
+  }
+}
