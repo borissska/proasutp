@@ -20,8 +20,6 @@ const MainPage: FC = () => {
 
   return (
     <div className={styles.mainPage}>
-      <Crosshair />
-      <Hint />
       <Canvas
         className={styles.canvas}
         camera={{
@@ -39,6 +37,12 @@ const MainPage: FC = () => {
       >
         <Logic />
       </Canvas>
+
+      {/* UI-элементы поверх канваса */}
+      <div className={styles.uiOverlay}>
+        <Crosshair />
+        <Hint />
+      </div>
     </div>
   );
 };
