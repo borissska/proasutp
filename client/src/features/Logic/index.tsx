@@ -17,8 +17,30 @@ const Logic: FC = () => {
     right: false,
   });
 
-  // Получение камеры из контекста three.js
-  const { camera } = useThree();
+  // Получение камеры и других объектов из контекста three.js
+  const { camera, gl, scene } = useThree();
+
+  // Проверяем инициализацию WebGL
+  useEffect(() => {
+    console.log("WebGL Initialization Status:");
+    console.log("Renderer:", gl);
+    console.log("Scene:", scene);
+    console.log("Camera:", camera);
+
+    // Debug renderer capabilities
+    if (gl) {
+      console.log("WebGL Context:", gl.getContext());
+      console.log("WebGL Info:", {
+        version: gl.getContext().getParameter(gl.getContext().VERSION),
+        vendor: gl.getContext().getParameter(gl.getContext().VENDOR),
+        renderer: gl.getContext().getParameter(gl.getContext().RENDERER),
+        shadingLanguageVersion: gl
+          .getContext()
+          .getParameter(gl.getContext().SHADING_LANGUAGE_VERSION),
+        extensions: gl.getContext().getSupportedExtensions(),
+      });
+    }
+  }, [gl, scene, camera]);
 
   // Ссылка на контроллер перемещения
   const controlsRef = useRef<any>(null);
@@ -266,8 +288,8 @@ const Logic: FC = () => {
           <PerspectiveCamera makeDefault />
           <PointerLockControls ref={controlsRef} />
 
-            <Environment />
-            <Room />
+          <Environment />
+          <Room />
         </Suspense>
       </ErrorBoundary>
     </group>
