@@ -1,9 +1,10 @@
 import { Vector3 } from "three";
+import { ObjectClickHandler, ObjectHoverHandler } from "../../Room.props";
 
 export interface DistributionBoxProps {
     position: [number, number, number];
     rotation: [number, number, number];
     scale: number;
-    handleObjectClick?: (title: string, description: string, position: Vector3) => void;
-    handleObjectHover?: (title: string) => void;
+    handleObjectClick?: ObjectClickHandler;
+    handleObjectHover?: ObjectHoverHandler;
 }

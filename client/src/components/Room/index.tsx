@@ -1,20 +1,17 @@
-import { Suspense, FC, useEffect, useRef, useState, Fragment } from "react";
+import { FC, useRef, useState, Fragment, useEffect } from "react";
 import RoomModel from "./Content/RoomModel";
-import RoomFallback from "./Content/RoomFallback";
-import ErrorBoundary from "./Content/RoomError";
 import Logo from "./Content/Logo";
-import { PointerLockControls, PerspectiveCamera } from "@react-three/drei";
-import { useThree, useFrame } from "@react-three/fiber";
 import { Vector3, Mesh, MeshStandardMaterial, Group } from "three";
 import AlarmLight from "./Content/AlarmLight";
 import InfoCard from "./Content/InfoCard";
-import { InfoCardState } from "./Room.props";
-import Environment from "../Environment";
+import { InfoCardState, ObjectClickHandler, ObjectHoverHandler } from "./Room.props";
 import DistributionBox from "./Content/DistributionBox";
 import Table from "./Content/Table";
 import Box from "./Content/Box";
 import Model from "./Content/Model";
 import ElectricityBox from "./Content/ElecticityBox";
+import Phone from "./Content/Phone";
+import { useHover } from "../../context/HoverContext";
 
 // Основной компонент
 const Room: FC = () => {
@@ -24,50 +21,41 @@ const Room: FC = () => {
     title: "",
     description: "",
     position: new Vector3(),
+    width: 0,
   });
 
   const sceneRef = useRef<Group | null>(null);
+  // Используем контекст для состояния наведения
+  const { setIsHovered, resetHoverState } = useHover();
 
   // Обработчик клика по объекту
-  const handleObjectClick = (title: string, description: string, position: Vector3) => {
+  const handleObjectClick: ObjectClickHandler = (
+    title: string,
+    description: string,
+    position: Vector3,
+    width: number
+  ) => {
     setInfoCard({
       visible: true,
       title,
       description,
       position,
+      width,
     });
   };
 
-  // Обработчик наведения на объекты
-  const handleObjectHover = (title: string) => {
-    if (!sceneRef.current) return;
+  // Обработчик наведения
+  const handleObjectHover: ObjectHoverHandler = (hovered: boolean) => {
+    // Используем функцию setIsHovered из контекста
+    setIsHovered(hovered);
+  };
 
-    const hoveredObject = sceneRef.current.getObjectByName(title);
-
-    if (hoveredObject instanceof Mesh) {
-      // Сохраняем оригинальный материал
-      const originalMaterial = hoveredObject.material;
-
-      // Создаем новый материал с подсветкой
-      const highlightMaterial = new MeshStandardMaterial({
-        color: 0x00ff00,
-        emissive: 0x00ff00,
-        emissiveIntensity: 0.3,
-        metalness: 0.5,
-        roughness: 0.5,
-      });
-
-      // Применяем подсветку
-      hoveredObject.material = highlightMaterial;
-
-      // Возвращаем оригинальный материал при уходе курсора
-      const handlePointerLeave = () => {
-        hoveredObject.material = originalMaterial;
-        hoveredObject.removeEventListener("pointerleave", handlePointerLeave);
-      };
-
-      hoveredObject.addEventListener("pointerleave", handlePointerLeave);
-    }
+  // Простой обработчик для невзаимодействующих частей комнаты
+  const handleBackgroundClick = () => {
+    // Сбрасываем состояние при клике на невзаимодействующие части
+    resetHoverState();
+    // Закрываем информационную карточку
+    setInfoCard((prev) => ({ ...prev, visible: false }));
   };
 
   return (
@@ -87,16 +75,25 @@ const Room: FC = () => {
           description={infoCard.description}
           position={infoCard.position}
           visible={true}
+          width={320}
         />
       )}
 
       <Table />
       <Model />
       <ElectricityBox />
+      <Phone
+        position={[-3.31, 2, -12]}
+        rotation={[0, Math.PI / 2, 0]}
+        handleObjectClick={handleObjectClick}
+        handleObjectHover={handleObjectHover}
+        name='phone'
+      />
       <Box
         position={[2.5, 0.19, 4.7]}
         rotation={[0, 0, 0]}
         handleObjectClick={handleObjectClick}
+        handleObjectHover={handleObjectHover}
         name='box'
       />
 
@@ -109,14 +106,7 @@ const Room: FC = () => {
       ))}
 
       {/* Комната и её содержимое */}
-      <group
-        position={[0, 0, 0]}
-        onClick={() => {
-          // Закрываем информационную карточку при клике на пустое пространство
-          setInfoCard((prev) => ({ ...prev, visible: false }));
-        }}
-        ref={sceneRef}
-      >
+      <group position={[0, 0, 0]} onClick={handleBackgroundClick} ref={sceneRef}>
         <RoomModel />
 
         {/* Размещаем логотип в комнате в нескольких местах */}

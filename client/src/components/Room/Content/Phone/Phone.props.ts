@@ -1,7 +1,7 @@
 import { Vector3 } from "three";
 import { ObjectClickHandler, ObjectHoverHandler } from "../../Room.props";
 
-export interface BoxProps { 
+export interface PhoneProps { 
     position: [number, number, number], 
     rotation: [number, number, number], 
     handleObjectClick?: ObjectClickHandler,

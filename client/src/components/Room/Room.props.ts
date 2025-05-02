@@ -1,4 +1,4 @@
-import { Vector3 } from "@react-three/fiber";
+import { Vector3 } from "three";
 
 // Определение типа для состояния информационной карточки
 export interface InfoCardState {
@@ -6,4 +6,13 @@ export interface InfoCardState {
     title: string;
     description: string;
     position: Vector3;
+    width: number;
   }
+
+export interface ObjectClickHandler {
+  (title: string, description: string, position: Vector3, width: number): void;
+}
+
+export interface ObjectHoverHandler {
+  (hovered: boolean): void;
+}

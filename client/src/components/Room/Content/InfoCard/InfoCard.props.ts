@@ -8,4 +8,5 @@ export interface InfoCardProps {
     description: string;  // Описание объекта
     position: Vector3;    // Позиция карточки в 3D пространстве
     visible: boolean;     // Флаг видимости
+    width?: number;       // Ширина карточки (опционально)
   }

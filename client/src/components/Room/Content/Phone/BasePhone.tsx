@@ -1,29 +1,33 @@
 import { useGLTF } from "@react-three/drei";
 import { FC, useRef, useMemo, useEffect } from "react";
-import { BoxProps } from "./Box.props";
+import { PhoneProps } from "./Phone.props";
 import { Mesh, Group, Raycaster, Intersection } from "three";
 
 // Предварительно загружаем модель логотипа
-useGLTF.preload("./Box/model.glb");
+useGLTF.preload("./Phone/model.glb");
 
-// Базовый компонент без эффектов
-const BaseBox: FC<Omit<BoxProps, "handleObjectHover">> = ({ position, rotation, name }) => {
-  const boxRef = useRef<Group>(null);
+// Компонент для загрузки и отображения GLB логотипа
+const Phone: FC<PhoneProps> = ({
+  position = [-3.31, 2, -12],
+  rotation = [0, Math.PI / 2, 0],
+  name = "Phone",
+}) => {
+  const phoneRef = useRef<Group>(null);
 
   // Загружаем GLB модель логотипа с уникальным ключом кэширования для каждого экземпляра
-  const { scene } = useGLTF("./Box/model.glb", true);
+  const { scene } = useGLTF("./Phone/model.glb", true);
 
   // Клонируем модель для предотвращения конфликтов при использовании нескольких экземпляров
   const clonedScene = useMemo(() => {
     const cloned = scene.clone(true);
     // Уменьшаем размер модели
-    cloned.scale.set(0.6, 0.6, 0.6);
+    cloned.scale.set(0.4, 0.4, 0.4);
     return cloned;
   }, [scene]);
 
   useEffect(() => {
-    if (boxRef.current && clonedScene) {
-      console.log(`GLB коробка ${name} успешно загружена`);
+    if (phoneRef.current && clonedScene) {
+      console.log(`GLB телефон ${name} успешно загружен`);
 
       // Обработка материалов и теней для модели
       clonedScene.traverse((child: any) => {
@@ -45,19 +49,19 @@ const BaseBox: FC<Omit<BoxProps, "handleObjectHover">> = ({ position, rotation, 
         }
       });
 
-      // Добавляем невидимый коллайдер вокруг объекта для лучшего обнаружения событий
+      // Добавляем коллайдер на весь объект для лучшего обнаружения событий
       const containerMesh = new Mesh();
       containerMesh.visible = false; // Скрываем визуально
-      containerMesh.scale.set(0.35, 0.35, 0.35); // Размер коллайдера под новый масштаб модели
+      containerMesh.scale.set(0.08, 0.08, 0.08); // Размер коллайдера под новый масштаб модели
       containerMesh.userData.__interactive = true;
+      phoneRef.current.add(containerMesh);
 
-      // Применяем клонированную сцену и коллайдер
-      boxRef.current.add(clonedScene);
-      boxRef.current.add(containerMesh);
+      // Применяем клонированную сцену
+      phoneRef.current.add(clonedScene);
     }
   }, [clonedScene, name]);
 
-  return <group position={position} rotation={rotation} ref={boxRef} />;
+  return <group ref={phoneRef} position={position} rotation={rotation} />;
 };
 
-export default BaseBox;
+export default Phone;
