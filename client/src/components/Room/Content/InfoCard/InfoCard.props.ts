@@ -1,4 +1,4 @@
-import { Vector3 } from "@react-three/fiber";
+import { Vector3 } from "three";
 
 /**
  * Интерфейс для информационной карточки, которая появляется при клике на объект

@@ -1,4 +1,3 @@
-import { Vector3 } from "three";
 import { ObjectClickHandler, ObjectHoverHandler } from "../../Room.props";
 
 export interface BoxProps { 

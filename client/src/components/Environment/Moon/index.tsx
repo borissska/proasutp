@@ -1,12 +1,8 @@
-import { useLoader, useFrame } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
 import { useRef, useEffect } from "react";
-import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { MoonProps } from "./Moon.props";
+import { useFrame } from "@react-three/fiber";
 
-/**
- * Компонент луны, вращающейся вокруг планеты
- */
 const Moon: React.FC<MoonProps> = ({
   centerPosition,
   orbitRadius,
@@ -17,32 +13,35 @@ const Moon: React.FC<MoonProps> = ({
   const moonGroup = useRef<any>(null);
   const orbitGroup = useRef<any>(null);
 
-  // Загрузка материалов и модели - исправленные пути
-  const materials = useLoader(MTLLoader, "/Moon/Moon.mtl");
-  const obj = useLoader(OBJLoader, "/Moon/Moon.obj", (loader) => {
-    materials.preload();
-    loader.setMaterials(materials);
-  });
+  // Загружаем GLB модель
+  const { scene } = useGLTF("/Moon/Moon.glb");
 
   // Случайная начальная позиция на орбите
   const startAngle = useRef(Math.random() * Math.PI * 2);
 
   // Настройка модели при первом рендере
   useEffect(() => {
-    if (obj && moonGroup.current) {
-      // Модель луны может нуждаться в дополнительном масштабировании
-      // в зависимости от фактического размера модели
-      const scaleFactor = radius / 250; // Уменьшаем знаменатель для увеличения модели
-
+    if (scene && moonGroup.current) {
+      // Уменьшаем масштаб для Луны
+      const scaleFactor = radius / 50;
       moonGroup.current.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-      // Возможно, потребуется дополнительная коррекция позиции или поворота
-      obj.rotation.set(0, 0, 0);
-      obj.position.set(0, 0, 0);
+      // Настраиваем материалы
+      scene.traverse((child: any) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+          // Добавляем металлический блеск для Луны
+          if (child.material) {
+            child.material.metalness = 0.3;
+            child.material.roughness = 0.7;
+          }
+        }
+      });
 
-      console.log("Луна загружена:", obj);
+      console.log("Луна загружена:", scene);
     }
-  }, [obj, radius]);
+  }, [scene, radius]);
 
   // Вращение луны вокруг своей оси и вокруг планеты
   useFrame(({ clock }) => {
@@ -57,7 +56,7 @@ const Moon: React.FC<MoonProps> = ({
       const angle = startAngle.current + time * orbitSpeed;
 
       orbitGroup.current.position.x = centerPosition.x + Math.cos(angle) * orbitRadius;
-      orbitGroup.current.position.y = centerPosition.y + Math.sin(angle) * orbitRadius * 0.2; // Эллиптическая орбита
+      orbitGroup.current.position.y = centerPosition.y + Math.sin(angle) * orbitRadius * 0.2;
       orbitGroup.current.position.z = centerPosition.z + Math.sin(angle) * orbitRadius;
     }
   });
@@ -65,7 +64,7 @@ const Moon: React.FC<MoonProps> = ({
   return (
     <group ref={orbitGroup}>
       <group ref={moonGroup}>
-        <primitive object={obj.clone()} />
+        <primitive object={scene.clone()} />
       </group>
     </group>
   );

@@ -65,12 +65,12 @@ const Logic: FC = () => {
           typeof position.x === "number" &&
           typeof position.y === "number" &&
           typeof position.z === "number" &&
-          position.x >= -3.2 &&
-          position.x <= 3.2 &&
+          position.x >= -2.2 &&
+          position.x <= 2.2 &&
           position.y >= -0.3 &&
           position.y <= 7.5 &&
-          position.z >= -13.5 &&
-          position.z <= 13.5;
+          position.z >= -10.5 &&
+          position.z <= 10.5;
 
         if (isValid) {
           camera.position.set(position.x, position.y, position.z);
@@ -79,15 +79,15 @@ const Logic: FC = () => {
           console.warn(
             "Сохраненная позиция находится вне допустимых границ, используем позицию по умолчанию"
           );
-          camera.position.set(0, 1.7, 12);
+          camera.position.set(0, 1.7, 9);
         }
       } catch (e) {
         console.error("Ошибка при загрузке позиции:", e);
-        camera.position.set(0, 1.7, 12);
+        camera.position.set(0, 1.7, 9);
       }
     } else {
       console.log("Нет сохраненной позиции, устанавливаем стартовую");
-      camera.position.set(0, 1.7, 12);
+      camera.position.set(0, 1.7, 9);
     }
 
     // Загружаем сохраненный поворот камеры
@@ -189,10 +189,10 @@ const Logic: FC = () => {
 
     // Границы комнаты с учетом толщины игрока
     const roomBounds = {
-      minX: -3.2 + playerRadius,
-      maxX: 3.2 - playerRadius,
-      minZ: -13.5 + playerRadius,
-      maxZ: 13.5 - playerRadius,
+      minX: -2.2 + playerRadius,
+      maxX: 2.2 - playerRadius,
+      minZ: -10.5 + playerRadius,
+      maxZ: 10.5 - playerRadius,
       minY: -2 + playerHeight,
       maxY: 8 - 0.5, // Верхняя граница с запасом
     };

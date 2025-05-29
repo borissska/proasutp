@@ -1,4 +1,4 @@
-import { FC, useRef, useState, Fragment, useEffect } from "react";
+import { FC, useRef, useState, Fragment, useEffect, useCallback } from "react";
 import RoomModel from "./Content/RoomModel";
 import Logo from "./Content/Logo";
 import { Vector3, Mesh, MeshStandardMaterial, Group } from "three";
@@ -12,6 +12,16 @@ import Model from "./Content/Model";
 import ElectricityBox from "./Content/ElecticityBox";
 import Phone from "./Content/Phone";
 import { useHover } from "../../context/HoverContext";
+import WallPaper from "./Content/WallPaper";
+import Notepad from "./Content/Notepad";
+import { useGLTF } from "@react-three/drei";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+
+// В начале файла
+const loader = new OBJLoader();
+loader.load("/WallPaper/model.obj", (obj) => {
+  // Предварительная загрузка
+});
 
 // Основной компонент
 const Room: FC = () => {
@@ -29,41 +39,47 @@ const Room: FC = () => {
   const { setIsHovered, resetHoverState } = useHover();
 
   // Обработчик клика по объекту
-  const handleObjectClick: ObjectClickHandler = (
-    title: string,
-    description: string,
-    position: Vector3,
-    width: number
-  ) => {
-    setInfoCard({
-      visible: true,
-      title,
-      description,
-      position,
-      width,
-    });
-  };
+  const handleObjectClick: ObjectClickHandler = useCallback(
+    (title: string, description: string, position: Vector3, width: number) => {
+      setInfoCard({
+        visible: true,
+        title,
+        description,
+        position,
+        width,
+      });
+    },
+    []
+  );
 
-  // Обработчик наведения
-  const handleObjectHover: ObjectHoverHandler = (hovered: boolean) => {
-    // Используем функцию setIsHovered из контекста
-    setIsHovered(hovered);
-  };
+  // Обработчик наведения - мемоизируем функцию для предотвращения ненужных перерендеров
+  const handleObjectHover: ObjectHoverHandler = useCallback(
+    (hovered: boolean) => {
+      setIsHovered(hovered);
+    },
+    [setIsHovered]
+  );
 
   // Простой обработчик для невзаимодействующих частей комнаты
-  const handleBackgroundClick = () => {
-    // Сбрасываем состояние при клике на невзаимодействующие части
+  const handleBackgroundClick = useCallback(() => {
     resetHoverState();
-    // Закрываем информационную карточку
     setInfoCard((prev) => ({ ...prev, visible: false }));
-  };
+  }, [resetHoverState]);
 
   return (
     <group position={[0, 0, 0]}>
+      <Box
+        position={[1.7, 0.325, 5]}
+        rotation={[0, Math.PI / 2, 0]}
+        name={"Box"}
+        handleObjectClick={handleObjectClick}
+        handleObjectHover={handleObjectHover}
+      />
+
       <DistributionBox
-        position={[-3.2, -1, 10]}
+        position={[-2.52, -1.1, 7.5]}
         rotation={[-Math.PI / 2, 0, Math.PI / 2]}
-        scale={0.02}
+        scale={0.018}
         handleObjectClick={handleObjectClick}
         handleObjectHover={handleObjectHover}
       />
@@ -75,33 +91,46 @@ const Room: FC = () => {
           description={infoCard.description}
           position={infoCard.position}
           visible={true}
-          width={320}
+          width={infoCard.width}
         />
       )}
 
-      <Table />
-      <Model />
-      <ElectricityBox />
+      <Table position={[1.7, 0, 7]} rotation={[0, Math.PI / 2, 0]} />
+      <Model
+        position={[2.15, 0.98, 8.25]}
+        rotation={[0, Math.PI / 2, 0]}
+        handleObjectClick={handleObjectClick}
+        handleObjectHover={handleObjectHover}
+        name='model'
+      />
+      {/* <ElectricityBox /> */}
       <Phone
-        position={[-3.31, 2, -12]}
+        position={[-2.6, 1.7, -9.2]}
         rotation={[0, Math.PI / 2, 0]}
         handleObjectClick={handleObjectClick}
         handleObjectHover={handleObjectHover}
         name='phone'
       />
-      <Box
-        position={[2.5, 0.19, 4.7]}
-        rotation={[0, 0, 0]}
+      <WallPaper
+        position={[-1.9, -2.25, 1]}
+        rotation={[-Math.PI / 2, 0, Math.PI / 2]}
         handleObjectClick={handleObjectClick}
         handleObjectHover={handleObjectHover}
         name='box'
       />
+      <Notepad
+        position={[-2.6, 1.6, -1.5]}
+        rotation={[-Math.PI / 2, Math.PI / 2, 0]}
+        handleObjectClick={handleObjectClick}
+        handleObjectHover={handleObjectHover}
+        name='notepad'
+      />
 
       {/* Потолочные светильники вдоль коридора */}
-      {[-11, 0, 10.5].map((z) => (
+      {[-6, 0, 8].map((z) => (
         <Fragment key={z}>
           {/* Светильники на левой стене */}
-          <AlarmLight position={[-3.4, 2, z]} rotation={[0, Math.PI / 2, 0]} />
+          <AlarmLight position={[-2.7, 1.6, z]} rotation={[0, Math.PI / 2, 0]} />
         </Fragment>
       ))}
 
@@ -110,8 +139,8 @@ const Room: FC = () => {
         <RoomModel />
 
         {/* Размещаем логотип в комнате в нескольких местах */}
-        <Logo position={[0, 2.15, -13.37]} rotation={[0, 0, 0]} />
-        <Logo position={[0, 2.15, 13.37]} rotation={[0, Math.PI, 0]} />
+        <Logo position={[0, 1.57, -10.4]} rotation={[0, 0, 0]} />
+        <Logo position={[0, 1.57, 10.4]} rotation={[0, Math.PI, 0]} />
       </group>
     </group>
   );

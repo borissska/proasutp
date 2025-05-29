@@ -17,7 +17,7 @@ const RoomModel: FC = () => {
       // Настройка модели
       roomModel.rotation.set(0, 0, 0);
       roomModel.position.set(0, 0, 0);
-      roomModel.scale.set(0.0045, 0.0045, 0.0045); // Меньший масштаб для FBX
+      roomModel.scale.set(0.0035, 0.0035, 0.0035); // Меньший масштаб для FBX
     }
   }, [roomModel]);
 

@@ -1,63 +1,50 @@
 import { useGLTF } from "@react-three/drei";
-import { FC, useRef, useMemo, useEffect } from "react";
+import { FC, useRef, useMemo, useEffect, forwardRef } from "react";
 import { BoxProps } from "./Box.props";
-import { Mesh, Group, Raycaster, Intersection } from "three";
+import { Mesh, Group } from "three";
 
 // Предварительно загружаем модель логотипа
 useGLTF.preload("./Box/model.glb");
 
 // Базовый компонент без эффектов
-const BaseBox: FC<Omit<BoxProps, "handleObjectHover">> = ({ position, rotation, name }) => {
-  const boxRef = useRef<Group>(null);
+const BaseBox = forwardRef<Group, Omit<BoxProps, "handleObjectHover">>(
+  ({ position, rotation, name }, ref) => {
+    const localRef = useRef<Group>(null);
+    const boxRef = ref || localRef;
 
-  // Загружаем GLB модель логотипа с уникальным ключом кэширования для каждого экземпляра
-  const { scene } = useGLTF("./Box/model.glb", true);
+    // Загружаем GLB модель логотипа
+    const { scene } = useGLTF("./Box/model.glb", true);
 
-  // Клонируем модель для предотвращения конфликтов при использовании нескольких экземпляров
-  const clonedScene = useMemo(() => {
-    const cloned = scene.clone(true);
-    // Уменьшаем размер модели
-    cloned.scale.set(0.6, 0.6, 0.6);
-    return cloned;
-  }, [scene]);
+    // Клонируем модель для предотвращения конфликтов
+    const clonedScene = useMemo(() => {
+      const cloned = scene.clone(true);
+      cloned.scale.set(0.6, 0.6, 0.6);
+      return cloned;
+    }, [scene]);
 
-  useEffect(() => {
-    if (boxRef.current && clonedScene) {
-      console.log(`GLB коробка ${name} успешно загружена`);
+    useEffect(() => {
+      if (boxRef && "current" in boxRef && boxRef.current && clonedScene) {
+        console.log(`GLB коробка ${name} успешно загружена`);
 
-      // Обработка материалов и теней для модели
-      clonedScene.traverse((child: any) => {
-        if (child.isMesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
+        // Обработка материалов и теней для модели
+        clonedScene.traverse((child: any) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+            child.name = `${child.name || "mesh"}_${name}`;
+            child.userData.__interactive = true;
+          }
+        });
 
-          // Назначаем уникальный ID для предотвращения конфликтов
-          child.name = `${child.name || "mesh"}_${name}`;
+        // Добавляем клонированную сцену
+        boxRef.current.add(clonedScene);
+      }
+    }, [clonedScene, name, boxRef]);
 
-          // Убеждаемся, что raycast работает корректно
-          const originalRaycast = child.raycast;
-          child.raycast = function (raycaster: Raycaster, intersects: Intersection[]) {
-            originalRaycast.call(this, raycaster, intersects);
-          };
+    return <group ref={boxRef} position={position} rotation={rotation} name={name} />;
+  }
+);
 
-          // Помечаем как интерактивный элемент
-          child.userData.__interactive = true;
-        }
-      });
-
-      // Добавляем невидимый коллайдер вокруг объекта для лучшего обнаружения событий
-      const containerMesh = new Mesh();
-      containerMesh.visible = false; // Скрываем визуально
-      containerMesh.scale.set(0.35, 0.35, 0.35); // Размер коллайдера под новый масштаб модели
-      containerMesh.userData.__interactive = true;
-
-      // Применяем клонированную сцену и коллайдер
-      boxRef.current.add(clonedScene);
-      boxRef.current.add(containerMesh);
-    }
-  }, [clonedScene, name]);
-
-  return <group position={position} rotation={rotation} ref={boxRef} />;
-};
+BaseBox.displayName = "BaseBox";
 
 export default BaseBox;

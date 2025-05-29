@@ -4,26 +4,21 @@ import { Vector3, Object3D } from "three";
 import BaseBox from "./BaseBox";
 import createInteractiveModel from "../HOC/createNewInteractiveModel";
 
+// Создаем HOC с нашим базовым компонентом один раз
+const InteractiveBox = createInteractiveModel(BaseBox);
+
 /**
  * Компонент Box с эффектами интерактивности
  */
 const Box: FC<BoxProps> = (props) => {
   const { position, rotation, handleObjectClick, handleObjectHover, name } = props;
 
-  // Создаем HOC с нашим базовым компонентом
-  const InteractiveBox = createInteractiveModel(BaseBox);
-
   // Функция для обработки клика на объект
   const handleClick = useCallback(() => {
     if (handleObjectClick) {
       const infoPosition = new Vector3(position[0], position[1] + 0.5, position[2]);
 
-      handleObjectClick(
-        "Области деятельности",
-        `Мы занимаемся поставкой оборудования для производства и промышленных предприятий`,
-        infoPosition,
-        320
-      );
+      handleObjectClick("Области деятельности", `Мы занимаемся поставкой оборудования для производства и промышленных предприятий`, infoPosition, 320);
     }
   }, [handleObjectClick, position]);
 

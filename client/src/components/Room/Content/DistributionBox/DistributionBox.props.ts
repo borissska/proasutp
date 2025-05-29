@@ -4,7 +4,8 @@ import { ObjectClickHandler, ObjectHoverHandler } from "../../Room.props";
 export interface DistributionBoxProps {
     position: [number, number, number];
     rotation: [number, number, number];
-    scale: number;
+    scale?: number;
+    name?: string;
     handleObjectClick?: ObjectClickHandler;
     handleObjectHover?: ObjectHoverHandler;
 }

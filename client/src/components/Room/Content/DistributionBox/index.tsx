@@ -4,14 +4,14 @@ import { Vector3, Object3D } from "three";
 import BaseDistributionBox from "./BaseDistibutionBox";
 import createInteractiveModel from "../HOC/createNewInteractiveModel";
 
+// Создаем HOC с нашим базовым компонентом один раз
+const InteractiveDistributionBox = createInteractiveModel(BaseDistributionBox);
+
 /**
  * Компонент распределительного щита с эффектами интерактивности
  */
 const DistributionBox: FC<DistributionBoxProps> = (props) => {
-  const { position, rotation, scale, handleObjectClick, handleObjectHover } = props;
-
-  // Создаем HOC с нашим базовым компонентом
-  const InteractiveDistributionBox = createInteractiveModel(BaseDistributionBox);
+  const { position, rotation, scale = 1, handleObjectClick, handleObjectHover, name } = props;
 
   // Функция для обработки клика на объект
   const handleClick = useCallback(() => {
@@ -21,7 +21,7 @@ const DistributionBox: FC<DistributionBoxProps> = (props) => {
         "Распределительный щит",
         "Контролирует подачу энергии и защищает от перегрузок",
         infoPosition,
-        320
+        300
       );
     }
   }, [handleObjectClick, position]);
@@ -41,6 +41,7 @@ const DistributionBox: FC<DistributionBoxProps> = (props) => {
       position={position}
       rotation={rotation}
       scale={scale}
+      name={name}
       onClick={handleClick}
       onHover={handleHover}
     />

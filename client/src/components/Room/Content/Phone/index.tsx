@@ -16,7 +16,7 @@ const Phone: FC<PhoneProps> = (props) => {
   // Функция для обработки клика на объект
   const handleClick = useCallback(() => {
     if (handleObjectClick) {
-      const infoPosition = new Vector3(position[0], position[1] + 0.5, position[2]);
+      const infoPosition = new Vector3(position[0], position[1], position[2]);
 
       handleObjectClick(
         "Информация о компании",

@@ -18,6 +18,9 @@ COPY --from=builder /app/build/ /usr/share/nginx/html/
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+# Create directory for SSL certificates
+RUN mkdir -p /etc/nginx/ssl/live/проасутп.рус
+
+EXPOSE 80 443
 
 CMD ["nginx", "-g", "daemon off;"]

@@ -1,0 +1,220 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 518,
+      "max": [0.20000001788139343, 0.3100000023841858, 0.021999986842274666],
+      "min": [-0.20000001788139343, -0.35999995470046997, -0.0020000000949949026],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 6216,
+      "componentType": 5126,
+      "count": 518,
+      "max": [1.0, 0.9914606213569641, 0.9914606213569641],
+      "min": [-1.0, -0.9914685487747192, -0.9914606213569641],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 518,
+      "max": [0.9920305609703064, 1.0, 0.9999921917915344, 1.0],
+      "min": [-0.9915688037872314, -0.9999921917915344, -0.9923038482666016, -1.0],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 518,
+      "max": [0.9997392892837524, 0.9811367988586426],
+      "min": [0.0002607543719932437, 0.0002607543719932437],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 4144,
+      "componentType": 5126,
+      "count": 518,
+      "max": [0.9997392892837524, 0.9811367988586426],
+      "min": [0.0002607543719932437, 0.0002607543719932437],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 8288,
+      "componentType": 5126,
+      "count": 518,
+      "max": [0.9997392892837524, 0.9811367988586426],
+      "min": [0.0002607543719932437, 0.0002607543719932437],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 1878,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "Justin.Foley (https://sketchfab.com/Justin.Foley)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/notepad-bloody-1e1e62bb10284b6e9188036de528ff4c",
+      "title": "Notepad (Bloody)"
+    },
+    "generator": "Sketchfab-12.68.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 7512,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 12432,
+      "byteOffset": 7512,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 12432,
+      "byteOffset": 19944,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 8288,
+      "byteOffset": 32376,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 40664,
+      "uri": "model.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/Notepad_BAKED_baseColor.png"
+    },
+    {
+      "uri": "textures/Notepad_BAKED_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/Notepad_BAKED_normal.png"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "Notepad_BAKED",
+      "normalTexture": {
+        "index": 2,
+        "scale": 0.5
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "metallicRoughnessTexture": {
+          "index": 1
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Notepad_BAKED_Notepad_BAKED_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3,
+            "TEXCOORD_1": 4,
+            "TEXCOORD_2": 5
+          },
+          "indices": 6,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [1],
+      "matrix": [
+        1.0, 0.0, 0.0, 0.0, 0.0, 2.220446049250313e-16, -1.0, 0.0, 0.0, 1.0, 2.220446049250313e-16,
+        0.0, 0.0, 0.0, 0.0, 1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [2],
+      "matrix": [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+      "name": "06c6636ea79f402ba9e5494f2f99215f.fbx"
+    },
+    {
+      "children": [3],
+      "name": "RootNode"
+    },
+    {
+      "children": [4],
+      "matrix": [
+        -99.99999999999241, 1.2246465878873718e-14, 3.8941437775530106e-5, 0.0, 3.894143777553e-5,
+        7.549789982075339e-6, 99.99999999999213, 0.0, -2.9277502948264183e-12, 99.9999999999997,
+        -7.549789970973109e-6, 0.0, 0.0, 0.0, 0.0, 1.0
+      ],
+      "name": "Notepad_BAKED"
+    },
+    {
+      "mesh": 0,
+      "name": "Notepad_BAKED_Notepad_BAKED_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [0]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    }
+  ]
+}

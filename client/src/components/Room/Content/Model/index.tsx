@@ -1,47 +1,56 @@
-import { useGLTF } from "@react-three/drei";
-import { FC, useRef, useMemo, useEffect } from "react";
+import { FC, useCallback } from "react";
 import { ModelProps } from "./Model.props";
+import { Vector3 } from "three";
+import BaseModel from "./BaseModel";
+import createInteractiveModel from "../HOC/createNewInteractiveModel";
 
-// Предварительно загружаем модель логотипа
-useGLTF.preload("./Model/model.glb");
+// Создаем HOC с нашим базовым компонентом один раз
+const InteractiveModel = createInteractiveModel(BaseModel);
 
-// Компонент для загрузки и отображения GLB логотипа
-const Model: FC<ModelProps> = ({
-  position = [2.65, 0.98, 8.25],
-  rotation = [0, Math.PI / 2, 0],
-  id = "Model",
-}) => {
-  const ModelRef = useRef<any>(null);
+/**
+ * Компонент Model с эффектами интерактивности
+ */
+const Model: FC<ModelProps> = (props) => {
+  const {
+    position = [2.65, 0.98, 8.25],
+    rotation = [0, Math.PI / 2, 0],
+    handleObjectClick,
+    handleObjectHover,
+    name = "Model",
+  } = props;
 
-  // Загружаем GLB модель логотипа с уникальным ключом кэширования для каждого экземпляра
-  const { scene } = useGLTF("./Model/model.glb", true);
+  // Функция для обработки клика на объект
+  const handleClick = useCallback(() => {
+    if (handleObjectClick) {
+      const infoPosition = new Vector3(position[0], position[1] + 0.5, position[2]);
 
-  // Клонируем модель для предотвращения конфликтов при использовании нескольких экземпляров
-  const clonedScene = useMemo(() => {
-    return scene.clone(true);
-  }, [scene]);
-
-  useEffect(() => {
-    if (ModelRef.current && clonedScene) {
-      console.log(`GLB логотип ${id} успешно загружен`);
-
-      // Обработка материалов и теней для логотипа
-      clonedScene.traverse((child: any) => {
-        if (child.isMesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
-
-          // Назначаем уникальный ID для предотвращения конфликтов
-          child.name = `${child.name || "mesh"}_${id}`;
-        }
-      });
+      handleObjectClick(
+        "3D Модель",
+        `Интерактивная 3D модель для демонстрации возможностей`,
+        infoPosition,
+        320
+      );
     }
-  }, [clonedScene, id]);
+  }, [handleObjectClick, position]);
+
+  // Функция для обработки наведения на объект
+  const handleHover = useCallback(
+    (object: any) => {
+      if (handleObjectHover) {
+        handleObjectHover(!!object);
+      }
+    },
+    [handleObjectHover]
+  );
 
   return (
-    <group ref={ModelRef} position={position} rotation={rotation}>
-      <primitive object={clonedScene} scale={[0.0012, 0.0012, 0.0012]} />
-    </group>
+    <InteractiveModel
+      position={position}
+      rotation={rotation}
+      name={name}
+      onClick={handleClick}
+      onHover={handleHover}
+    />
   );
 };
 

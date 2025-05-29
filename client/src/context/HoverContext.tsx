@@ -4,7 +4,6 @@ import React, {
   useState,
   ReactNode,
   useEffect,
-  useRef,
   useCallback,
 } from "react";
 
@@ -30,8 +29,6 @@ interface HoverProviderProps {
 
 export const HoverProvider: React.FC<HoverProviderProps> = ({ children }) => {
   const [isHovered, setIsHoveredState] = useState(false);
-  const lastMoveTimeRef = useRef(Date.now());
-  const cursorPositionRef = useRef({ x: 0, y: 0 });
 
   // Явный сброс состояния
   const resetHoverState = useCallback(() => {
@@ -40,41 +37,11 @@ export const HoverProvider: React.FC<HoverProviderProps> = ({ children }) => {
 
   // Установка состояния
   const setIsHovered = useCallback((newState: boolean) => {
-    // Устанавливаем новое состояние
     setIsHoveredState(newState);
-
-    // Обновляем время последнего действия, только если включаем состояние
-    if (newState) {
-      lastMoveTimeRef.current = Date.now();
-    }
   }, []);
 
-  // Глобальные обработчики событий для защиты от залипания при быстром перемещении курсора
+  // Эффект для изменения классов в DOM
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      // Обновляем время последнего движения
-      lastMoveTimeRef.current = Date.now();
-
-      // Сохраняем позицию курсора
-      cursorPositionRef.current = { x: e.clientX, y: e.clientY };
-    };
-
-    const handleMouseLeave = () => resetHoverState();
-
-    // Устанавливаем обработчики
-    window.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      // Очистка обработчиков
-      window.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, [resetHoverState]);
-
-  // Эффект для проверки состояния при каждом рендере
-  useEffect(() => {
-    // Если состояние включено, добавляем класс к body
     if (isHovered) {
       document.body.classList.add("hover-active");
     } else {

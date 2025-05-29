@@ -6,7 +6,7 @@ import Earth from "./Earth";
 import { FC, useEffect } from "react";
 import Space from "./Space";
 import { useThree } from "@react-three/fiber";
-import { Color, CubeTextureLoader } from "three";
+import { Color } from "three";
 
 /**
  * Основной компонент космического окружения
@@ -21,50 +21,11 @@ const Environment: FC = () => {
 
     console.log("Initializing Environment");
 
-    // Устанавливаем базовый цвет фона сцены
-    scene.background = new Color("#000000");
+    // Устанавливаем простой цвет фона
+    scene.background = new Color("#000033"); // Тёмно-синий цвет для космоса
 
-    // Попробуем загрузить cubemap для космического окружения
-    try {
-      const cubeLoader = new CubeTextureLoader();
-
-      // Для отладки загрузки
-      console.log("Loading skybox textures...");
-
-      // Массив текстур для cubemap с пометкой для CORS
-      const urls = [
-        "/skybox/right.jpg",
-        "/skybox/left.jpg",
-        "/skybox/top.jpg",
-        "/skybox/bottom.jpg",
-        "/skybox/front.jpg",
-        "/skybox/back.jpg",
-      ];
-
-      // Создаем текстурный загрузчик с обработкой ошибок
-      cubeLoader.setCrossOrigin("anonymous");
-      cubeLoader.load(
-        urls,
-        (textureCube) => {
-          console.log("Skybox loaded successfully!");
-          scene.background = textureCube;
-        },
-        (progress) => {
-          console.log(`Loading skybox: ${Math.round((progress.loaded / progress.total) * 100)}%`);
-        },
-        (error) => {
-          console.error("Error loading skybox:", error);
-          // Используем резервный цвет фона в случае ошибки
-          scene.background = new Color("#000033");
-        }
-      );
-    } catch (e) {
-      console.error("Failed to load skybox:", e);
-      scene.background = new Color("#000033");
-    }
-
-    // Установим базовый цвет тумана
-    scene.fog = null; // Отключаем туман для космоса
+    // Отключаем туман
+    scene.fog = null;
 
     return () => {
       // Очистка при размонтировании компонента
@@ -77,7 +38,7 @@ const Environment: FC = () => {
   const sunPosition = new Vector3(500, 100, -500);
 
   // Позиции планет - изменена позиция Земли
-  const earthPosition = new Vector3(100, 0, 50);
+  const earthPosition = new Vector3(120, 0, 50);
 
   return (
     <group>
@@ -90,12 +51,12 @@ const Environment: FC = () => {
       <Sun position={sunPosition} radius={15} />
 
       {/* Планеты с быстрым вращением */}
-      <Earth position={earthPosition} radius={9} rotationSpeed={0.0008} />
+      <Earth position={earthPosition} radius={5} rotationSpeed={0.0008} />
 
       {/* Луна, вращающаяся вокруг Земли */}
       <Moon
         centerPosition={earthPosition}
-        orbitRadius={30}
+        orbitRadius={20}
         radius={10}
         rotationSpeed={0.0015}
         orbitSpeed={0.001}
