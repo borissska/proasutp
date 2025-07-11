@@ -1,0 +1,1 @@
+export { MobileRedirect } from './ui/mobile-redirect'; 

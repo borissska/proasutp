@@ -1,15 +1,16 @@
-import React from "react";
-import MainPage from "../pages/MainPage";
-import styles from "./App.module.scss";
-import MobileRedirect from "../components/MobileRedirect";
+import { FC } from "react";
+import { withProviders } from "./providers";
+import { MobileRedirect } from "../features/mobile-redirect";
+import { MainPage } from "../pages/main";
+import "./styles/index.scss";
 
-const App: React.FC = () => {
+const App: FC = () => {
   return (
-    <div className={styles.app}>
+    <div className='app'>
       <MobileRedirect />
       <MainPage />
     </div>
   );
 };
 
-export default App;
+export default withProviders(App);

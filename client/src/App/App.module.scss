@@ -1,10 +1,11 @@
-@import "../shared/styles_base/variables.scss";
-@import "../shared/styles_base/normalize.scss";
+@import "./styles/variables.scss";
+@import "./styles/normalize.scss";
 
 .app {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #000;
 }

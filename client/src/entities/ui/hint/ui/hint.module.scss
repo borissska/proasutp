@@ -1,0 +1,16 @@
+@import "../../../../app/styles/variables.scss";
+
+.hint {
+  position: absolute;
+  bottom: $spacing-lg;
+  left: 50%;
+  transform: translateX(-50%);
+  color: $text-color;
+  background-color: rgba($background-color, 0.5);
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius-sm;
+  font-size: 14px;
+  z-index: $z-index-tooltip;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}

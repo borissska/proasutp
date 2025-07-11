@@ -1,0 +1,12 @@
+export { AlarmLight } from "./alarm-light/alarm-light";
+export { Box } from "./box/box";
+export { DistributionBox } from "./distribution-box/distribution-box";
+export { ElectricityBox } from "./electricity-box/electricity-box";
+export { Logo } from "./logo/logo";
+export { Boilerhouse } from "./boilerhouse/boilerhouse";
+export { RoomModel } from "./room/room";
+export { Table } from "./table/table";
+export { WallBox } from "./wall-box/wall-box";
+export { Notepad } from "./notepad/notepad";
+export { Phone } from "./phone/phone";
+export { BaseModel } from './base-model/base-model';

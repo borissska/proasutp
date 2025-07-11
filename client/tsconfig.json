@@ -19,6 +19,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["./*"]
+    },
     "typeRoots": ["node_modules/@types", "src/@types"],
     "types": ["node", "react", "babel__core", "body-parser", "connect", "express", "sockjs"]
   },
