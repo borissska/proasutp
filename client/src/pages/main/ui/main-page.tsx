@@ -21,7 +21,7 @@ const MainPageContent: FC = () => {
 
       <Canvas
         className={styles.canvas}
-        camera={{ fov: 75, near: 0.1, far: 10000 }}
+        camera={{ fov: 60, near: 0.1, far: 10000 }}
         gl={{
           antialias: true,
           alpha: false,

@@ -189,9 +189,9 @@ export const withInteractiveModelCollision = <P extends Partial<BaseModelProps>>
             <boxGeometry args={collisionData.size} />
             <meshBasicMaterial
               transparent
-              // opacity={0.3}
-              // color={0x00ff00}
-              // wireframe={true}
+              opacity={0}
+              color={0x00ff00}
+              wireframe={true}
             />
           </mesh>
         )}
